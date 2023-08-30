@@ -102,3 +102,17 @@ if __name__ == '__main__':
                     ├── student-grades-attendances.html
                     └── table.html        
 ```
+
+#### Function
+- sign-up
+    - professor
+    - student
+- professor
+    - add course
+    - give grades
+    - mark Attendance(by.face recognition)
+- student
+    - check course
+    - check grades
+    - check attendance
+
