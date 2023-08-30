@@ -16,7 +16,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
 ```
 #### structure
-![1](https://github.com/4th-Oasis-Hackathon/kimkangjeong/assets/93754504/f58ffcc2-dda0-428e-a442-a8a8f610ab1e)
+![image](https://github.com/DYSA-OS/face-recognition-attendance-system/assets/93754504/009bc588-32f5-4f85-8d9a-dc77cdff47d8)
 
 #### setting
 - install libraries ```pip install -r requirements.txt```
