@@ -1,6 +1,5 @@
-# kimkangjeong
-- Title: Auto Attendance System with AI(Face Recognition)
-- Skill: Python, Spring, JavaScript
+# Face Recognition Attendance System
+An integrated management system to manage student attendance and grades. Facial recognition is performed by webcam in the professor's classroom and attendance is verified. Students can enter each classroom and check their attendance in real-time and also can check there grades.
 
 ## Model
 ### Diagram
