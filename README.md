@@ -3,7 +3,7 @@ An integrated management system to manage student attendance and grades. Facial 
 
 ## Model
 ### Diagram
-![](https://github.com/4th-Oasis-Hackathon/kimkangjeong/assets/93754504/24c369fa-7bfa-45f2-a410-e9dfc4a1e7cf)
+![image](https://github.com/DYSA-OS/face-recognition-attendance-system/assets/93754504/f0c1e008-3fac-446c-9869-90d7eaebdf47)
 
 ### 1. Face Recognition
 [main.py](https://github.com/4th-Oasis-Hackathon/kimkangjeong/blob/main/FaceRecognition/main.py) is **python server** that predicts the username from the captured image with SVM. The model retrains at intervals to learn about new users coming into the data folder. So you have to set interval times on ```interval_in_seconds```
