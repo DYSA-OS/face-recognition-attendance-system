@@ -1,1 +1,105 @@
-# face-recognition-attendance-system
+# kimkangjeong
+- Title: Auto Attendance System with AI(Face Recognition)
+- Skill: Python, Spring, JavaScript
+
+## Model
+### Diagram
+![](https://github.com/4th-Oasis-Hackathon/kimkangjeong/assets/93754504/24c369fa-7bfa-45f2-a410-e9dfc4a1e7cf)
+
+### 1. Face Recognition
+[main.py](https://github.com/4th-Oasis-Hackathon/kimkangjeong/blob/main/FaceRecognition/main.py) is **python server** that predicts the username from the captured image with SVM. The model retrains at intervals to learn about new users coming into the data folder. So you have to set interval times on ```interval_in_seconds```
+
+```
+if __name__ == '__main__':
+    interval_in_seconds = 1 * 60 * 30 
+    schedule_model_training(interval_in_seconds)
+
+    app.run(host='0.0.0.0', port=5001)
+```
+#### structure
+![1](https://github.com/4th-Oasis-Hackathon/kimkangjeong/assets/93754504/f58ffcc2-dda0-428e-a442-a8a8f610ab1e)
+
+#### setting
+- install libraries ```pip install -r requirements.txt```
+- delete files in [📁 data](https://github.com/4th-Oasis-Hackathon/kimkangjeong/tree/main/FaceRecognition/data) for reset datasets
+- run the code while using website ```python main.py```
+  
+### 2. Website
+```
+📁AttendanceApp
+├── HELP.md
+├── build
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── settings.gradle
+└── src
+    └── main
+        ├── generated
+        ├── java
+        │   └── FaceAuto
+        │       └── AttendanceApp
+        │           ├── AttendanceAppApplication.java 
+        │           ├── CORSConfig.java
+        │           ├── WebMvcConfiguration.java
+        │           ├── domain
+        │           │   ├── Attendance.java
+        │           │   ├── AttendanceStatus.java
+        │           │   ├── Course.java
+        │           │   ├── Grade.java
+        │           │   ├── Professor.java
+        │           │   ├── Student.java
+        │           │   └── StudentCourse.java
+        │           ├── repository
+        │           │   ├── AttendanceRepository.java
+        │           │   ├── CourseRepository.java
+        │           │   ├── GradeRepository.java
+        │           │   ├── ProfessorRepository.java
+        │           │   ├── StudentCourseRepository.java
+        │           │   └── StudentRepository.java
+        │           ├── service
+        │           │   ├── AttendanceService.java
+        │           │   ├── CourseService.java
+        │           │   ├── FileStorageService.java
+        │           │   ├── ProfessorService.java
+        │           │   ├── StudentCourseService.java
+        │           │   └── StudentService.java
+        │           └── web
+        │               ├── AttendanceRequest.java
+        │               ├── CourseController.java
+        │               ├── CourseForm.java
+        │               ├── GradeRequest.java
+        │               ├── ProfessorController.java
+        │               ├── ProfessorForm.java
+        │               ├── StudentController.java
+        │               └── StudentForm.java
+        └── resources
+            ├── application.properties
+            ├── application.yml
+            ├── static
+            └── templates
+                ├── fragments
+                │   ├── bodyHeader.html
+                │   ├── footer.html
+                │   └── header.html
+                ├── professor
+                │   ├── add-course.html
+                │   ├── attendance.html
+                │   ├── attendance_result.html
+                │   ├── course-details.html
+                │   ├── grade-form.html
+                │   ├── index.html
+                │   ├── professor-details.html
+                │   └── sign-up.html
+                └── student
+                    ├── index.html
+                    ├── sign-up.html
+                    ├── student-details.html
+                    ├── student-grade.html
+                    ├── student-grades-attendances.html
+                    └── table.html        
+```
