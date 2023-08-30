@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Student Page</title>
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/dist/css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" th:href="@{/student/{studentId}(studentId=${student.id})}">호남의 얼굴</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+            </ul>
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i th:text="${student.name}" class="bi bi-person-fill"> 학생이름</i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{/}">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Header-->
+<header class="bg-dark py-2">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Welcome Student</h1>
+            <div class="lead fw-normal text-white-50 mb-0">
+                <p class="lead fw-normal text-white-50 mb-0"><span th:text="${student.name}">성함</span></p>
+                <p class="lead fw-normal text-white-50 mb-0"><span th:text="${student.sId}">교번</span></p>
+                <p class="lead fw-normal text-white-50 mb-0"><span th:text="${student.univ}">학교</span></p>
+                <p class="lead fw-normal text-white-50 mb-0"><span th:text="${student.major}">전공</span></p>
+                <p class="lead fw-normal text-white-50 mb-0"><span th:text="${student.email}">이메일 주소</span></p>
+                <!-- 프로필 이미지 표시 영역 -->
+                <img id="profilePicture" th:if="${student.profilePicture}" th:src="@{/img/} + ${student.getProfilePicture()}" alt="Profile Picture" style="width: 257px; height: 329px;">
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-2">
+        <h3 style="text-align:center">Courses</h3><br>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-md-3 justify-content-center">
+            <div class="col mb-5" th:each="course : ${registeredCourses}">
+                <div class="card h-60">
+                    <!-- Product image-->
+                    <img class="card-img-top" th:src="@{/imgs/good.jpeg}" alt="과목이미지"/>
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Subject name-->
+                            <h5 class="fw-bolder" th:text="${course.courseName}">과목명</h5>
+                            <!-- Professor name-->
+                            <h5 th:text="${course.professor.name}"> 교수님 이름</h5>
+                        </div>
+                    </div>
+                    <!-- Product actions-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <a class="btn btn-outline-dark mt-auto"
+                               th:href="@{/student/{studentId}/course/{courseId}(studentId=${student.id}, courseId=${course.id})}">
+                                강의실 입장</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/src/js/table.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
+<script src="/src/js/datatables-simple-demo.js"></script>
+</body>
+</html>

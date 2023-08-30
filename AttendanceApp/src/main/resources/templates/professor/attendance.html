@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Professor</title>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/dist/css/styles.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"/>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" th:href="@{/professor/{professorId}(professorId=${professor.id})}">호남의 얼굴</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+            </ul>
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i th:text="${professor.name}" class="bi bi-person-fill"> 교수님 성함</i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item"
+                               th:href="@{/professor/{professorId}/add-course(professorId=${professor.id})}">Add
+                            Course</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider"/>
+                        </li>
+                        <li><a class="dropdown-item" th:href="@{/}">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Header-->
+<header class="bg-dark py-2">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Attendance</h1>
+            <p class="lead fw-normal text-white-50 mb-0">- Professor -</p>
+        </div>
+    </div>
+</header>
+<!-- Section-->
+<section class="py-3">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <div class="row mb-4">
+                        <div class="row-cols-3">
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item active"><strong><span th:text="${course.courseName}"></span></strong>
+                                </li>
+                                <li class="breadcrumb-item active"><span th:text="${professor.name}"></span></li>
+                            </ol>
+                        </div>
+
+                        <h1>Attendance System</h1>
+
+                        <video id="video" autoplay></video>
+                        <canvas id="canvas" style="display: none;"></canvas>
+                        <button onclick="startWebcam()">Start Webcam</button>
+                        <button onclick="captureImage()">Capture and Send Image</button>
+
+                        <!-- 결과 데이터 출력 -->
+                        <div id="result" style="display: none;">
+                            <p id="result-data"></p>
+                        </div>
+
+                        <!-- 캡쳐된 이미지 출력하는 부분 -->
+                        <img id="captured-image" src="" alt="Captured Image">
+
+                        <!-- 웹캠띄우기-->
+                        <script>
+                            navigator.mediaDevices.getUserMedia({video: true})
+                                .then(function (stream) {
+                                    var video = document.getElementById('video');
+                                    video.srcObject = stream;
+                                    video.onloadedmetadata = function (e) {
+                                        video.play();
+                                    };
+                                })
+                                .catch(function (err) {
+                                    console.log(err);
+                                });
+                        </script>
+
+                        <script>
+                            let videoStream;
+                            let jsonDataList = [];
+
+                            async function startWebcam() {
+                                const videoElement = document.getElementById('video');
+                                try {
+                                    videoStream = await navigator.mediaDevices.getUserMedia({video: true});
+                                    videoElement.srcObject = videoStream;
+                                } catch (error) {
+                                    console.error('Error accessing webcam:', error);
+                                }
+                            }
+
+                            async function captureImage() {
+                                const videoElement = document.getElementById('video');
+                                const canvasElement = document.getElementById('canvas');
+                                const context = canvasElement.getContext('2d');
+                                context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+                                const imageDataURL = canvasElement.toDataURL('image/jpeg');
+
+                                // 캡쳐한 이미지 화면에 띄우기
+                                const capturedImageElement = document.getElementById('captured-image');
+                                capturedImageElement.src = imageDataURL;
+
+                                // Python 서버로 캡쳐한 이미지 보내기
+                                const response = await fetch('http://127.0.0.1:5001/process-attendance', {
+                                    method: 'POST',
+                                    body: JSON.stringify({image: imageDataURL}),
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    mode: 'cors' // CORS 모드로 요청
+                                });
+
+                                const responseData = await response.json(); //응답받은 json 객체 저장
+                                jsonDataList.push(responseData); //리스트에 json 데이터 추가
+                                console.log(jsonDataList);
+                                console.log(typeof jsonDataList);
+                                console.log(typeof JSON.stringify(jsonDataList));
+
+                                // 응답데이터를 화면에 띄우기
+                                const resultElement = document.getElementById('result');
+                                resultElement.style.display = 'block';
+                                // 응답데이터 정제해서 띄우기
+                                const formattedResponse = `${responseData.name}님 출석완료했습니다.\nTimeStamp: ${responseData.timestamp}`;
+                                const resultDataElement = document.getElementById('result-data');
+                                resultDataElement.innerText = formattedResponse;
+                            }
+
+                            // function prepareFormAndSubmit() {
+                            //     // 폼 요소 가져오기
+                            //     const attendanceForm = document.getElementById('attendance-form');
+                            //
+                            //     document.getElementById('hidden-json-data').value = JSON.stringify(jsonDataList)
+                            //
+                            //     // 폼 제출
+                            //     attendanceForm.submit();
+                            // }
+
+                            function prepareFormAndSubmit() {
+                                const professorId = document.getElementById('professorId').value;
+                                const courseId = document.getElementById('courseId').value;
+                                // const attendanceForm = document.getElementById('attendance-form');
+                                console.log(professorId);
+                                console.log(courseId);
+                                fetch('http://127.0.0.1:8080/professor/' + professorId + '/course/' + courseId + '/mark-attendance', {
+                                    method: 'POST',
+                                    body: JSON.stringify(jsonDataList),
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    mode: 'cors' // CORS 모드로 요청
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // 응답 처리
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+                            }
+
+                            // 웹캡 입력 멈추기
+                            videoStream.getTracks().forEach(track => track.stop());
+                        </script>
+
+                        <!-- 데이터 저장용 hidden input 요소 -->
+                        <input type="hidden" id="professorId" th:value="${professorId}" />
+                        <input type="hidden" id="courseId" th:value="${courseId}" />
+
+                        <button onclick="prepareFormAndSubmit()">Submit</button>
+
+<!--                        <form id="attendance-form" method="post" th:action="@{/professor/{professorId}/course/{courseId}/mark-attendance(professorId=${course.professor.id}, courseId=${course.id})}">-->
+<!--                            <input type="hidden" id="hidden-json-data" name="jsonData">-->
+<!--                            <button onclick="submitFormWithJsonData()">Submit</button>-->
+<!--                        </form>-->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/src/js/table.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
+<script src="/src/js/datatables-simple-demo.js"></script>
+</body>
+</html>

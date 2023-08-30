@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Muhamad Nauval Azhar">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="This is a login page template based on Bootstrap 5">
+    <title>Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
+
+<body>
+<section class="h-100">
+    <div class="container h-100">
+        <div class="row justify-content-sm-center h-100">
+            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                <div class="text-center my-5">
+                </div>
+                <div class="card shadow-lg">
+                    <div class="card-body p-5">
+                        <h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
+                        <!--							===-->
+                        <form action="/professor/sign-up" th:object="${form}" class="needs-validation" method="post"
+                              novalidate="" autocomplete="off"
+                              enctype="multipart/form-data">
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <label class="mb-2 text-muted" for="name">Name</label>
+                                    <input type="text" id="name" name="name" class="form-control" th:field="*{name}"
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Name is required
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="mb-2 text-muted" for="employeeId">Employee ID</label>
+                                    <input type="text" id="employeeId" name="employeeId" class="form-control"
+                                           th:field="*{employeeId}" required>
+                                    <div class="invalid-feedback">
+                                        Employee ID is required
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="email">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" th:field="*{email}"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Email is invalid
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="univ">University</label>
+                                <select id="univ" name="univ" class="form-select" required>
+                                    <option value="" disabled selected>Select an option</option>
+                                    <option th:each="option : ${universities}" th:value="${option}"
+                                            th:text="${option}"></option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a university
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="profilePictureFile">Profile Picture</label>
+                                <input type="file" id="profilePictureFile" name="profilePictureFile" accept="image/*"
+                                       class="form-control" th:field="*{profilePictureFile}">
+                                <div class="invalid-feedback">
+                                    Profile Picture is required
+                                </div>
+                            </div>
+                            <div class="align-items-center d-flex">
+                                <button type="submit" class="btn btn-primary ms-auto">
+                                    Register
+                                </button>
+                            </div>
+                        </form>
+
+                        <!--							===-->
+                    </div>
+                    <div class="card-footer py-3 border-0">
+                        <div class="text-center">
+                            Already have an account? <a href="./index.html" class="text-dark">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

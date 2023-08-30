@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Grade Form</title>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/dist/css/styles.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"/>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" th:href="@{/professor/{professorId}(professorId=${professor.id})}">호남의 얼굴</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+            </ul>
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i th:text="${professor.name}" class="bi bi-person-fill"> 교수님 성함</i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><<a class="dropdown-item"
+                                th:href="@{/professor/{professorId}/add-course(professorId=${professor.id})}">Add
+                            Course</a></li>
+                        <li>
+                            <hr class="dropdown-divider"/>
+                        </li>
+                        <li><a class="dropdown-item" th:href="@{/}">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Header-->
+<header class="bg-dark py-2">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Grade Students</h1>
+            <p class="lead fw-normal text-white-50 mb-0">- Professor -</p>
+        </div>
+    </div>
+</header>
+<!-- Section-->
+<section class="py-3">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <div class="row mb-4">
+                        <div class="row-cols-3">
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item active"><strong><span th:text="${course.courseName}"></span></strong>
+                                </li>
+                                <li class="breadcrumb-item active"><span th:text="${professor.name}"></span></li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Students
+                        </div>
+                        <form th:action="@{/professor/{professorId}/course/{courseId}/grade(professorId=${professor.id}, courseId=${course.id})}"
+                              method="post">
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Major</th>
+                                        <th>ID</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Major</th>
+                                        <th>ID</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    <tr th:each="student : ${students}">
+                                        <td><span th:text="${student.name}"></span></td>
+                                        <td><span th:text="${student.major}"></span></td>
+                                        <td><span th:text="${student.sId}"></span></td>
+                                        <td>
+                                            <select th:name="${student.id}">
+                                                <option value="A+">A+</option>
+                                                <option value="A">A</option>
+                                                <option value="B+">B+</option>
+                                                <option value="B">B</option>
+                                                <option value="C+">C+</option>
+                                                <option value="F">F</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <!--                                <tr>-->
+                                    <!--                                    <td>강다일</td>-->
+                                    <!--                                    <td>스마트팜학과</td>-->
+                                    <!--                                    <td>252341</td>-->
+                                    <!--                                    <td>A+</td>-->
+                                    <!--                                </tr>-->
+                                    <!--                                <tr>-->
+                                    <!--                                    <td>강다이</td>-->
+                                    <!--                                    <td>스마트팜학과</td>-->
+                                    <!--                                    <td>891940</td>-->
+                                    <!--                                    <td>C</td>-->
+                                    <!--                                </tr>-->
+                                    <!--                                <tr>-->
+                                    <!--                                    <td>강다삼</td>-->
+                                    <!--                                    <td>스마트팜학과</td>-->
+                                    <!--                                    <td>440112</td>-->
+                                    <!--                                    <td>B+</td>-->
+                                    <!--                                </tr>-->
+                                    </tbody>
+                                </table>
+                                <button type="submit">Save Grades</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/src/js/table.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
+<script src="/src/js/datatables-simple-demo.js"></script>
+</body>
+</html>

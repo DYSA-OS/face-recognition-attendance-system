@@ -1,0 +1,20 @@
+spring: #띄어쓰기 없음
+  datasource: #띄어쓰기 2칸
+    url: jdbc:h2:tcp://localhost/~/AttendanceApp #4칸
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa: #띄어쓰기 2칸
+    hibernate: #띄어쓰기 4칸
+      ddl-auto: create #띄어쓰기 6칸
+    properties: #띄어쓰기 4칸
+      hibernate: #띄어쓰기 6칸
+        # show_sql: true #띄어쓰기 8칸
+        format_sql: true #띄어쓰기 8칸
+logging.level: #띄어쓰기 없음
+    org.hibernate.SQL: debug #띄어쓰기 2칸
+    # org.hibernate.orm.jdbc.bind: trace #띄어쓰기 2칸
+#file:
+#  upload-dir : "/Users/sola/Documents/GitHub/FaceAutoAttendance_APP/AttendanceApp/src/main/resources/static/files"
+file:
+  external-upload-dir : "/Users/sola/Documents/GitHub/FaceAutoAttendence/data"
