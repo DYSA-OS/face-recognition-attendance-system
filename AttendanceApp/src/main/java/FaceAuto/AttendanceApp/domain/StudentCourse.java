@@ -29,8 +29,6 @@ public class StudentCourse {
     @OneToMany(mappedBy = "studentCourse", cascade = CascadeType.ALL)
     private List<Grade> grades = new ArrayList<>();
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    private Grade grade;
 
 //    <-- 연관 관계 설정 -->
     public void addGrade(Grade grade) {

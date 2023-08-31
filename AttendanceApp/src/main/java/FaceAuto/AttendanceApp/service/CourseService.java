@@ -35,14 +35,6 @@ public class CourseService {
     public List<Student> findStudentsByCourseId(Long courseId) {
         return studentCourseRepository.findStudentsByCourseId(courseId);
     }
-//    public List<Student> findStudentsByCourseId(Long courseId){
-//        Course course = courseRepository.findOne(courseId);
-//        List<Student> students = new ArrayList<>();
-//        for (StudentCourse studentCourse : course.getStudentCourses()) {
-//            students.add(studentCourse.getStudent());
-//        }
-//        return students;
-//    }
 
     /**
      * id로 과목 찾기

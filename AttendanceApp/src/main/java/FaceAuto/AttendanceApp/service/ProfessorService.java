@@ -46,10 +46,6 @@ public class ProfessorService {
         return professorRepository.findOne(id);
     }
 
-    /**
-     * 교번으로 교수님 찾기
-     */
-//    public Professor findByPid (String )
 
     /**
      * 교수님 아이디로 개설 강좌 전체 찾기

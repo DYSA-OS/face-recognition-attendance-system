@@ -29,7 +29,6 @@ public class StudentCourseService {
         StudentCourse studentCourse = new StudentCourse();
         studentCourse.setStudent(student);
         studentCourse.setCourse(course);
-//        studentCourse.setGrade(grade);
 
         studentCourseRepository.save(studentCourse);
     }

@@ -27,8 +27,6 @@ public class StudentRepository {
      * id로 학생 찾기
      */
     public Student findOne(Long id) {
-//        System.out.println("userid = " + userid); //userid로 찾으려고 해보았지만, 실패
-//        System.out.println(em.find(Member.class, userid));
         return em.find(Student.class, id);
     }
 

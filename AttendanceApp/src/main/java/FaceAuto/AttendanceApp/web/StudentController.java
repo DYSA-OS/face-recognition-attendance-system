@@ -99,9 +99,6 @@ public class StudentController {
 
         // 학생의 과목 점수 조회
         Grade grade = studentService.findStudentGrade(studentId, courseId); //이거 한 학생의 전체 과목 점수 리스트임;;
-//        if (studentService.findStudentGrade(studentId, courseId) != null) {
-//            Grade grade = studentService.findStudentGrade(studentId, courseId); //이거 한 학생의 전체 과목 점수 리스트임;;
-//        }
 
         // 학생의 출결 기록 조회
         List<Attendance> attendances = studentService.findStudentAttendancesForCourse(studentId, courseId);
@@ -114,20 +111,5 @@ public class StudentController {
         return "student/student-grades-attendances";
     }
 
-
-
-//    @GetMapping("/{studentId}/{courseId}")
-//    public String showStudentGrades(@PathVariable Long studentId, @PathVariable Long courseId, Model model) {
-//        Student student = studentService.findOne(studentId);
-//        Course course = courseService.findOne(courseId);
-//
-//        List<Grade> grades = studentService.findStudentGrades(studentId); //이거 한 학생의 전체 과목 점수 리스트임;;
-//
-//        model.addAttribute("student", student);
-//        model.addAttribute("course", course);
-//        model.addAttribute("grade", grade);
-//
-//        return "student/student-grades";
-//    }
 
 }

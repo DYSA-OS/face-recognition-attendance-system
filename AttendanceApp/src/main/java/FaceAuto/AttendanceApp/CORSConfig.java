@@ -17,3 +17,5 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //                .allowCredentials(true); // 인증 정보 (쿠키 등) 허용 여부
 //    }
 //}
+
+//이 부분은 js으로 직접 cors 모드로 변경

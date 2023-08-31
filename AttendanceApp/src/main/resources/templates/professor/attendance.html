@@ -67,135 +67,124 @@
                                 <li class="breadcrumb-item active"><span th:text="${professor.name}"></span></li>
                             </ol>
                         </div>
+                        <div class="text-center">
+                            <h1>Attendance System</h1>
 
-                        <h1>Attendance System</h1>
+                            <video id="video" autoplay></video>
+                            <canvas id="canvas" style="display: none;"></canvas>
+                            <button class="btn btn-outline-dark mt-auto" onclick="startWebcam()">Start Webcam</button>
+                            <button class="btn btn-outline-dark mt-auto" onclick="captureImage()">Capture and Send
+                                Image
+                            </button>
 
-                        <video id="video" autoplay></video>
-                        <canvas id="canvas" style="display: none;"></canvas>
-                        <button onclick="startWebcam()">Start Webcam</button>
-                        <button onclick="captureImage()">Capture and Send Image</button>
+                            <!-- 결과 데이터 출력 -->
+                            <div id="result" style="display: none;">
+                                <p id="result-data"></p>
+                            </div>
 
-                        <!-- 결과 데이터 출력 -->
-                        <div id="result" style="display: none;">
-                            <p id="result-data"></p>
-                        </div>
+                            <!-- 캡쳐된 이미지 출력하는 부분 -->
+                            <img id="captured-image" src="" alt="Captured Image">
 
-                        <!-- 캡쳐된 이미지 출력하는 부분 -->
-                        <img id="captured-image" src="" alt="Captured Image">
-
-                        <!-- 웹캠띄우기-->
-                        <script>
-                            navigator.mediaDevices.getUserMedia({video: true})
-                                .then(function (stream) {
-                                    var video = document.getElementById('video');
-                                    video.srcObject = stream;
-                                    video.onloadedmetadata = function (e) {
-                                        video.play();
-                                    };
-                                })
-                                .catch(function (err) {
-                                    console.log(err);
-                                });
-                        </script>
-
-                        <script>
-                            let videoStream;
-                            let jsonDataList = [];
-
-                            async function startWebcam() {
-                                const videoElement = document.getElementById('video');
-                                try {
-                                    videoStream = await navigator.mediaDevices.getUserMedia({video: true});
-                                    videoElement.srcObject = videoStream;
-                                } catch (error) {
-                                    console.error('Error accessing webcam:', error);
-                                }
-                            }
-
-                            async function captureImage() {
-                                const videoElement = document.getElementById('video');
-                                const canvasElement = document.getElementById('canvas');
-                                const context = canvasElement.getContext('2d');
-                                context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-
-                                const imageDataURL = canvasElement.toDataURL('image/jpeg');
-
-                                // 캡쳐한 이미지 화면에 띄우기
-                                const capturedImageElement = document.getElementById('captured-image');
-                                capturedImageElement.src = imageDataURL;
-
-                                // Python 서버로 캡쳐한 이미지 보내기
-                                const response = await fetch('http://127.0.0.1:5001/process-attendance', {
-                                    method: 'POST',
-                                    body: JSON.stringify({image: imageDataURL}),
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    mode: 'cors' // CORS 모드로 요청
-                                });
-
-                                const responseData = await response.json(); //응답받은 json 객체 저장
-                                jsonDataList.push(responseData); //리스트에 json 데이터 추가
-                                console.log(jsonDataList);
-                                console.log(typeof jsonDataList);
-                                console.log(typeof JSON.stringify(jsonDataList));
-
-                                // 응답데이터를 화면에 띄우기
-                                const resultElement = document.getElementById('result');
-                                resultElement.style.display = 'block';
-                                // 응답데이터 정제해서 띄우기
-                                const formattedResponse = `${responseData.name}님 출석완료했습니다.\nTimeStamp: ${responseData.timestamp}`;
-                                const resultDataElement = document.getElementById('result-data');
-                                resultDataElement.innerText = formattedResponse;
-                            }
-
-                            // function prepareFormAndSubmit() {
-                            //     // 폼 요소 가져오기
-                            //     const attendanceForm = document.getElementById('attendance-form');
-                            //
-                            //     document.getElementById('hidden-json-data').value = JSON.stringify(jsonDataList)
-                            //
-                            //     // 폼 제출
-                            //     attendanceForm.submit();
-                            // }
-
-                            function prepareFormAndSubmit() {
-                                const professorId = document.getElementById('professorId').value;
-                                const courseId = document.getElementById('courseId').value;
-                                // const attendanceForm = document.getElementById('attendance-form');
-                                console.log(professorId);
-                                console.log(courseId);
-                                fetch('http://127.0.0.1:8080/professor/' + professorId + '/course/' + courseId + '/mark-attendance', {
-                                    method: 'POST',
-                                    body: JSON.stringify(jsonDataList),
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    mode: 'cors' // CORS 모드로 요청
-                                })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        // 응답 처리
+                            <!-- 웹캠띄우기-->
+                            <script>
+                                navigator.mediaDevices.getUserMedia({video: true})
+                                    .then(function (stream) {
+                                        var video = document.getElementById('video');
+                                        video.srcObject = stream;
+                                        video.onloadedmetadata = function (e) {
+                                            video.play();
+                                        };
                                     })
-                                    .catch(error => {
-                                        console.error('Error:', error);
+                                    .catch(function (err) {
+                                        console.log(err);
                                     });
-                            }
+                            </script>
 
-                            // 웹캡 입력 멈추기
-                            videoStream.getTracks().forEach(track => track.stop());
-                        </script>
+                            <script>
+                                let videoStream;
+                                let jsonDataList = [];
 
-                        <!-- 데이터 저장용 hidden input 요소 -->
-                        <input type="hidden" id="professorId" th:value="${professorId}" />
-                        <input type="hidden" id="courseId" th:value="${courseId}" />
+                                async function startWebcam() {
+                                    const videoElement = document.getElementById('video');
+                                    try {
+                                        videoStream = await navigator.mediaDevices.getUserMedia({video: true});
+                                        videoElement.srcObject = videoStream;
+                                    } catch (error) {
+                                        console.error('Error accessing webcam:', error);
+                                    }
+                                }
 
-                        <button onclick="prepareFormAndSubmit()">Submit</button>
+                                async function captureImage() {
+                                    const videoElement = document.getElementById('video');
+                                    const canvasElement = document.getElementById('canvas');
+                                    const context = canvasElement.getContext('2d');
+                                    context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
 
-<!--                        <form id="attendance-form" method="post" th:action="@{/professor/{professorId}/course/{courseId}/mark-attendance(professorId=${course.professor.id}, courseId=${course.id})}">-->
-<!--                            <input type="hidden" id="hidden-json-data" name="jsonData">-->
-<!--                            <button onclick="submitFormWithJsonData()">Submit</button>-->
-<!--                        </form>-->
+                                    const imageDataURL = canvasElement.toDataURL('image/jpeg');
+
+                                    // 캡쳐한 이미지 화면에 띄우기
+                                    const capturedImageElement = document.getElementById('captured-image');
+                                    capturedImageElement.src = imageDataURL;
+
+                                    // Python 서버로 캡쳐한 이미지 보내기
+                                    const response = await fetch('http://127.0.0.1:5001/process-attendance', {
+                                        method: 'POST',
+                                        body: JSON.stringify({image: imageDataURL}),
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        mode: 'cors' // CORS 모드로 요청
+                                    });
+
+                                    const responseData = await response.json(); //응답받은 json 객체 저장
+                                    jsonDataList.push(responseData); //리스트에 json 데이터 추가
+                                    console.log(jsonDataList);
+                                    console.log(typeof jsonDataList);
+                                    console.log(typeof JSON.stringify(jsonDataList));
+
+                                    // 응답데이터를 화면에 띄우기
+                                    const resultElement = document.getElementById('result');
+                                    resultElement.style.display = 'block';
+                                    // 응답데이터 정제해서 띄우기
+                                    const formattedResponse = `${responseData.name}님 출석완료했습니다.\nTimeStamp: ${responseData.timestamp}`;
+                                    const resultDataElement = document.getElementById('result-data');
+                                    resultDataElement.innerText = formattedResponse;
+                                }
+
+                                function prepareFormAndSubmit() {
+                                    const professorId = document.getElementById('professorId').value;
+                                    const courseId = document.getElementById('courseId').value;
+                                    // const attendanceForm = document.getElementById('attendance-form');
+                                    console.log(professorId);
+                                    console.log(courseId);
+                                    fetch('http://127.0.0.1:8000/professor/' + professorId + '/course/' + courseId + '/mark-attendance', {
+                                        method: 'POST',
+                                        body: JSON.stringify(jsonDataList),
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        mode: 'cors' // CORS 모드로 요청
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // 응답 처리
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                        });
+                                }
+
+                                // 웹캡 입력 멈추기
+                                videoStream.getTracks().forEach(track => track.stop());
+                            </script>
+
+                            <!-- 데이터 저장용 hidden input 요소 -->
+                            <input type="hidden" id="professorId" th:value="${professorId}"/>
+                            <input type="hidden" id="courseId" th:value="${courseId}"/>
+
+                            <button class="btn btn-outline-dark mt-auto" onclick="prepareFormAndSubmit()">Submit
+                            </button>
+                        </div>
                     </div>
                 </div>
             </main>

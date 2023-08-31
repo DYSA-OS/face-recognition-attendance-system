@@ -59,7 +59,5 @@ public class StudentCourseRepository {
         studentCourse.getGrades().add(grade);
         em.merge(studentCourse);
     }
-//        studentCourse.addGrade(grade);
-//        em.merge(studentCourse);
 
 }
