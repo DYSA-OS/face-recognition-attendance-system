@@ -26,17 +26,12 @@ if __name__ == '__main__':
 ### 2. Website
 
 #### 개발환경⚙️
-project
-- gradle - Groovy
-language
-- Java 17
-framework
-- springBoot 3.1.3
-- package : Jar
-database
-- h2
-ide
-- intellij
+- project: gradle - Groovy
+- language: Java 17
+- framework: springBoot 3.1.3
+    - package : Jar
+- database: h2
+- ide: intellij
 
 
 ```
